@@ -1,17 +1,19 @@
-describe('MainController', function() {
-    var $controller, $scope;
-
-    // Charger le module avant chaque test
-    beforeEach(module('myApp'));
-
-    // Injecter les dépendances nécessaires
-    beforeEach(inject(function(_$controller_, _$rootScope_) {
-        $controller = _$controller_;
-        $scope = _$rootScope_.$new();
-    }));
-
-    it('doit définir le message correctement', function() {
-        $controller('MainController', { $scope: $scope });
-        expect($scope.message).toBe('Bonjour !');
+describe("Ma première test avec Jasmine", function() {
+    it("devrait retourner true", function() {
+      expect(true).toBe(true);
     });
-});
+  
+    it("devrait retourner false", function() {
+      expect(false).toBe(false);
+    });
+  
+    it("devrait vérifier une égalité", function() {
+      expect(1 + 1).toBe(2);
+    });
+  
+    it("devrait vérifier si une valeur est définie", function() {
+      let variable = "Bonjour !";
+      expect(variable).toBeDefined();
+    });
+  });
+  

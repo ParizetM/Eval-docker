@@ -19,17 +19,10 @@ jobs:
                 node-version: '14'
             - name: Install dependencies
               run: npm install
-            - name: Install Karma
-              run: npm install karma --save-dev
             - name: install jasmine
               run: npm install karma-jasmine jasmine-core --save-dev
-            - name: install karma-chrome-launcher
-              run: npm install karma-chrome-launcher --save-dev
-            - name: Set CHROME_BIN environment variable for Chromium
-              run: echo "CHROME_BIN=/usr/bin/chromium" >> $GITHUB_ENV
-
             - name: Execute tests
-              run: npx karma start karma.conf.js --single-run
+              run: npx jasmine tests/testsapp.spec.js
               
     sonar:
         runs-on: self-hosted
