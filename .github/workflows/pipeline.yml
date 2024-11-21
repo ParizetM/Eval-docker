@@ -26,7 +26,10 @@ jobs:
             - name: install karma-chrome-launcher
               run: npm install karma-chrome-launcher --save-dev
             - name: Install Chromium
-              run: sudo yum install -y chromium
+              run: 
+                sudo apt-get update
+                sudo apt-get install -y chromium-browser
+                sudo yum install -y chromium
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
               
