@@ -7,6 +7,9 @@ on:
 jobs:
     tests:
         runs-on: self-hosted
+        defaults:
+            run:
+                working-directory: app
         steps:
             - name: Checkout
               uses: actions/checkout@v4
@@ -14,11 +17,13 @@ jobs:
               uses: actions/setup-node@v2
               with:
                 node-version: '14'
+            - name: Install dependencies
+              run: npm install
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
-              working-directory: app
     sonar:
         runs-on: self-hosted
+        needs: [tests]
         steps:
             - name: Checkout
               uses: actions/checkout@v4
