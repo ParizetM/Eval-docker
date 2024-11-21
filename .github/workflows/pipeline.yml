@@ -29,6 +29,9 @@ jobs:
               run: 
                 sudo apt-get update &&
                 sudo apt-get install -y chromium
+            - name: Set CHROME_BIN environment variable for Chromium
+              run: echo "CHROME_BIN=/usr/bin/chromium" >> $GITHUB_ENV
+
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
               
