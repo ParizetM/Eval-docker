@@ -23,8 +23,11 @@ jobs:
               run: npm install karma --save-dev
             - name: install jasmine
               run: npm install karma-jasmine jasmine-core --save-dev
+            - name: install karma-chrome-launcher
+              run: npm install karma-chrome-launcher --save-dev
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
+              
     sonar:
         runs-on: self-hosted
         needs: [tests]
