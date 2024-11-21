@@ -1,0 +1,81 @@
+name: pipeline
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    tests:
+        runs-on: self-hosted
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+            - name: Execute tests
+              run: npx karma start karma.conf.js --single-run
+    sonar:
+        runs-on: self-hosted
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'
+            - name: Execute sonar
+              run: |
+                sonar-scanner \
+                    -Dsonar.projectKey=github \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=${{secrets.SONAR_HOST_URL}} \
+                    -Dsonar.login=${{secrets.SONAR_TOKEN}}
+            - name: SonarQube Quality Gate
+              uses: sonarsource/sonarqube-quality-gate-action@master
+              timeout-minutes: 5
+              with:
+                  scanMetadataReportFile: ./app/.scannerwork/report-task.txt
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+    docker:
+        runs-on: self-hosted
+        needs: [tests, sonar]
+        name: Build and push Docker image
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup docker
+              uses: docker/setup-qemu-action@v3
+            - name: setup docker builder
+              uses: docker/setup-buildx-action@v3
+            - name: Login to DockerHub
+              uses: docker/login-action@v3
+              with:
+                password: ${{ secrets.DOCKER_PASSWORD }}
+                username: ${{ secrets.DOCKER_USERNAME }}
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ secrets.DOCKER_TAG }}
+    deploy:
+        runs-on: self-hosted
+        needs: [docker]
+        name: Deploy to production
+        steps:
+            - name: Connexion et deploiment
+              run: >
+                ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 
+                "
+                 docker stop angular-app || true
+                 docker rm angular-app || true
+                 docker run -d -p 8090:80 --name angular-prod --network angular-network --pull always ${{ secrets.DOCKER_TAG }}
+                 exit
+                "
+
+
+              
