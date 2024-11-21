@@ -18,7 +18,11 @@ jobs:
               with:
                 node-version: '14'
             - name: Install dependencies
-              run: npm install jasmine
+              run: npm install
+            - name: Install Karma
+              run: npm install karma --save-dev
+            - name: install jasmine
+              run: npm install jasmine-core --save-dev
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
     sonar:
