@@ -22,7 +22,7 @@ jobs:
             - name: Install Karma
               run: npm install karma --save-dev
             - name: install jasmine
-              run: npm install jasmine-core --save-dev
+              run: npm install karma-jasmine jasmine-core --save-dev
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
     sonar:
