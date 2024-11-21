@@ -37,7 +37,7 @@ jobs:
             - name: Execute sonar
               run: |
                 sonar-scanner \
-                    -Dsonar.projectKey=github \
+                    -Dsonar.projectKey=angular \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=${{secrets.SONAR_HOST_URL}} \
                     -Dsonar.login=${{secrets.SONAR_TOKEN}}
