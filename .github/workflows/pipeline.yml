@@ -25,6 +25,10 @@ jobs:
               run: npm install karma-jasmine jasmine-core --save-dev
             - name: install karma-chrome-launcher
               run: npm install karma-chrome-launcher --save-dev
+            - name: Install Chromium
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y chromium-browser
             - name: Execute tests
               run: npx karma start karma.conf.js --single-run
               
